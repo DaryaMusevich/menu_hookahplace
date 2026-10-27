@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#F3EEE2">
+<title>HookahPlace — электронное меню: концепция, варианты, размещение</title>
+<meta name="robots" content="noindex">
+<meta name="description" content="Три варианта дизайна электронного меню HookahPlace на основе печатного, варианты размещения, QR-пакет и план запуска.">
+<link rel="icon" href="assets/illus/logo-wine.png">
+<link rel="stylesheet" href="assets/fonts/fonts.css">
+<link rel="stylesheet" href="assets/css/showcase.css">
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap nav__in">
+    <a class="nav__brand" href="#top">
+      <img src="assets/illus/logo-wine.png" alt="">
+      HookahPlace · меню
+    </a>
+    <div class="nav__links">
+      <a href="#variants">Варианты</a>
+      <a href="#placement">Размещение</a>
+      <a href="#qr">QR-пакет</a>
+      <a href="#plan">Запуск</a>
+    </div>
+  </div>
+</nav>
+
+<main id="top">
+  <div class="wrap">
+    <section class="hero">
+      <div>
+        <p class="hero__kicker">Электронное меню · Ноябрьск · 2026</p>
+        <h1>Меню, которое<br><em>всегда в кармане</em></h1>
+        <p class="hero__lead">
+          Взяли печатное меню 170×242 мм и собрали три направления электронной версии.
+          Выбранное — «Тихий сад»: продолжение бумажной вёрстки, теперь на русском и английском
+          с переключателем языка. Прототип рабочий: открывается по QR, не требует приложения.
+        </p>
+        <div class="hero__meta">
+          <span><b>RU / EN</b> два языка</span>
+          <span><b>36</b> позиций в базе</span>
+          <span><b>0 ₽</b> хостинг</span>
+          <span><b>1–2 сек</b> загрузка</span>
+        </div>
+        <div class="hero__cta">
+          <a class="btn" href="#variants">Смотреть варианты</a>
+          <a class="btn btn--ghost" href="#placement">Размещение и QR</a>
+        </div>
+      </div>
+      <div class="hero__phone">
+        <div class="phone">
+          <div class="phone__screen">
+            <iframe src="index.html" title="Прототип меню — вариант A" loading="eager"></iframe>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 01 -->
+    <section class="sec" id="inside">
+      <div class="sec__head"><span class="sec__num">01</span><h2>Что внутри</h2></div>
+      <p class="sec__lead">Это не картинка меню, а работающая страница. Ниже — то, что уже сделано во всех трёх вариантах.</p>
+      <div class="feats">
+        <div class="feat">
+          <p class="feat__n">01</p>
+          <h3>Одна база данных</h3>
+          <p>Все позиции, цены и составы лежат в одном файле <code>data.js</code>. Поменяли цену — обновилось во всех трёх вариантах и в поиске.</p>
+        </div>
+        <div class="feat">
+          <p class="feat__n">02</p>
+          <h3>Лёгкое и быстрое</h3>
+          <p>Один HTML-файл, локальные шрифты и иллюстрации из вашего макета. Никаких библиотек и трекеров — страница весит меньше фотографии.</p>
+        </div>
+        <div class="feat">
+          <p class="feat__n">03</p>
+          <h3>Без приложений</h3>
+          <p>Открывается в любом браузере по QR. Можно добавить на домашний экран телефона — гостю это не нужно объяснять, но приятно.</p>
+        </div>
+        <div class="feat">
+          <p class="feat__n">04</p>
+          <h3>Два языка</h3>
+          <p>Переключатель RU / EN в шапке: переводится всё — разделы, описания, составы, правила. Выбор языка запоминается, ссылку можно дать сразу на английскую версию: <code>?lang=en</code>.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 02 -->
+    <section class="sec" id="variants">
+      <div class="sec__head"><span class="sec__num">02</span><h2>Три визуальных направления</h2></div>
+      <p class="sec__lead">У всех трёх одинаковый контент, но разный характер и сценарий использования. Можно выбрать один или смешать: например, обложку и чайную карту из A, а карточки напитков из C.</p>
+
+      <div class="variants">
+        <article class="var">
+          <div class="var__phone">
+            <div class="phone"><div class="phone__screen">
+              <iframe src="index.html" title="Вариант A — Тихий сад" loading="eager"></iframe>
+            </div></div>
+          </div>
+          <div>
+            <p class="var__tag">Направление A · выбрано</p>
+            <h3>«Тихий сад»</h3>
+            <p>Прямое продолжение печатного меню: та же кремовая бумага, винный красный, широкие трекинги, гравюрные иллюстрации и пунктирные выноски к цене. Гость не замечает перехода с бумаги на экран.</p>
+            <ul class="var__list">
+              <li>русский и английский, переключатель в шапке</li>
+              <li>не требует обучения — структура как в печатном</li>
+              <li>работает без единого фото</li>
+            </ul>
+          </div>
+          <a class="var__btn" href="index.html"><span>Открыть A →</span><span class="var__lang">RU / EN</span></a>
+        </article>
+
+        <article class="var">
+          <div class="var__phone">
+            <div class="phone"><div class="phone__screen">
+              <iframe src="menu-b.html" title="Вариант B — Ночь" loading="eager"></iframe>
+            </div></div>
+          </div>
+          <div>
+            <p class="var__tag">Направление B</p>
+            <h3>«Ночь»</h3>
+            <p>Тёмный лаунж: тёплый уголь, золото, антиква Cormorant. Поиск по меню, чипсы разделов, калькулятор кальянов на компанию и нижняя навигация.</p>
+            <ul class="var__list">
+              <li>поиск и фильтры в одно касание</li>
+              <li>калькулятор снимает вопрос «сколько кальянов на нас»</li>
+              <li>вечерняя атмосфера, совпадает с посадкой</li>
+            </ul>
+          </div>
+          <a class="var__btn" href="menu-b.html">Открыть вариант B →</a>
+        </article>
+
+        <article class="var">
+          <div class="var__phone">
+            <div class="phone"><div class="phone__screen">
+              <iframe src="menu-c.html" title="Вариант C — Витрина" loading="eager"></iframe>
+            </div></div>
+          </div>
+          <div>
+            <p class="var__tag">Направление C</p>
+            <h3>«Витрина»</h3>
+            <p>Светлый каталог: белые карточки, крупные плитки с иллюстрациями (готовы слоты под фото), поиск, табы разделов и карточка позиции с составом.</p>
+            <ul class="var__list">
+              <li>проще всего добавить фотографии</li>
+              <li>удобно для доставки и агрегаторов</li>
+              <li>понятен гостю, который зашёл впервые</li>
+            </ul>
+          </div>
+          <a class="var__btn" href="menu-c.html">Открыть вариант C →</a>
+        </article>
+      </div>
+    </section>
+
+    <!-- 03 -->
+    <section class="sec" id="placement">
+      <div class="sec__head"><span class="sec__num">03</span><h2>Варианты размещения</h2></div>
+      <p class="sec__lead">Размещение — это два разных вопроса: где физически живёт ссылка (хостинг) и где гость встречает QR-код (носители). Ниже — оба уровня с ценой и сроком.</p>
+
+      <h3 style="font-family:'Jost',sans-serif;font-weight:500;font-size:18px;margin:24px 0 6px">3.1. Где живёт меню</h3>
+      <div class="host">
+        <div class="host__row host__row--best">
+          <div class="host__name">Свой домен + статика<small>рекомендую</small></div>
+          <div class="host__desc">Папка с меню на Netlify / Cloudflare Pages / GitHub Pages, адрес вида <b>menu.hookahplace.ru</b> или <b>hookahplace.ru/menu</b>. HTTPS, CDN и обновление за минуту — просто заменяете файл.</div>
+          <div class="host__price"><b>0–300 ₽</b>в месяц (домен)</div>
+        </div>
+        <div class="host__row">
+          <div class="host__name">GitHub Pages / Netlify / Vercel<small>бесплатный тариф</small></div>
+          <div class="host__desc">Загрузка перетаскиванием папки. Подходит, чтобы запуститься сегодня и решить про домен позже.</div>
+          <div class="host__price"><b>0 ₽</b>без ограничений по трафику</div>
+        </div>
+        <div class="host__row">
+          <div class="host__name">Tilda / Readymag<small>визуальный редактор</small></div>
+          <div class="host__desc">Если хотите править тексты сами в конструкторе. Меню встраивается ссылкой или в iframe, часть анимаций теряется.</div>
+          <div class="host__price"><b>750–1 500 ₽</b>в месяц</div>
+        </div>
+        <div class="host__row">
+          <div class="host__name">Telegram Mini App<small>кнопка в канале</small></div>
+          <div class="host__desc">Гость остаётся в Telegram: кнопка «Меню» открывает страницу внутри мессенджера. Хорошо работает на постоянных гостей и подписки.</div>
+          <div class="host__price"><b>0 ₽</b>+ настройка</div>
+        </div>
+        <div class="host__row">
+          <div class="host__name">Сервис меню<small>Quick Resto, Menu.ru, r_keeper</small></div>
+          <div class="host__desc">Нужен, если важна синхронизация с кассой: стоп-листы, остатки, автоматические цены. Дизайн ограничен шаблоном сервиса.</div>
+          <div class="host__price"><b>от 2 000 ₽</b>в месяц</div>
+        </div>
+        <div class="host__row">
+          <div class="host__name">PDF в облаке<small>не рекомендую</small></div>
+          <div class="host__desc">Гость открывает файл, зумит, теряет раздел. Нет аналитики, нет поиска, вес 4,6 МБ — на слабом интернете это долго.</div>
+          <div class="host__price"><b>0 ₽</b>но плохой опыт</div>
+        </div>
+      </div>
+
+      <h3 style="font-family:'Jost',sans-serif;font-weight:500;font-size:18px;margin:36px 0 6px">3.2. Где гость встречает QR</h3>
+      <div class="media">
+        <div class="media__card">
+          <div class="media__mock">
+            <div class="m-tent">
+              <b>Меню</b>
+              <img class="qr-img" alt="">
+              <small>hookahplace</small>
+            </div>
+          </div>
+          <h4>Подставка на стол</h4>
+          <p>Главный носитель. Двусторонняя, 100×150 мм, картон 300 г, матовая ламинация.</p>
+          <span class="mono">1 на стол · тираж 15–30 шт</span>
+        </div>
+        <div class="media__card">
+          <div class="media__mock">
+            <div class="m-stick">
+              <div class="m-stick__in"><img class="qr-img" alt=""></div>
+            </div>
+          </div>
+          <h4>Наклейка на стол</h4>
+          <p>Для барной стойки и подоконников. Винил, Ø 90 мм, матовая — не бликует от ламп.</p>
+          <span class="mono">1 на 2–3 посадочных места</span>
+        </div>
+        <div class="media__card">
+          <div class="media__mock">
+            <div class="m-plaque">
+              <img class="qr-img" alt="">
+              <span>Меню<br>и чайная<br>карта</span>
+            </div>
+          </div>
+          <h4>Табличка на входе</h4>
+          <p>Гость сканирует ещё до посадки. 150×100 мм, акрил или картон на подложке.</p>
+          <span class="mono">1 на вход · 1 на витрину</span>
+        </div>
+        <div class="media__card">
+          <div class="media__mock">
+            <div class="m-check">
+              <b>Меню</b>
+              <i>отсканируйте</i>
+              <img class="qr-img" alt="">
+            </div>
+          </div>
+          <h4>Чек и салфетки</h4>
+          <p>QR на чеке (25–30 мм) возвращает гостя в меню и на страницу отзывов.</p>
+          <span class="mono">печать на чековом принтере</span>
+        </div>
+      </div>
+      <p class="sec__lead" style="margin-top:26px">
+        <b>Рекомендуемый набор:</b> одна подставка на каждый стол, табличка на входе, ссылка «Меню» в шапке профиля и QR на чеке.
+        Важно: один QR ведёт на всё меню сразу, а не на отдельные разделы — гость должен видеть чай, кальян и лимонады с одного экрана.
+      </p>
+    </section>
+
+    <!-- 04 -->
+    <section class="sec" id="qr">
+      <div class="sec__head"><span class="sec__num">04</span><h2>QR-пакет</h2></div>
+      <p class="sec__lead">Код генерируется автоматически под тот адрес, где открыта эта страница. Когда меню переедет на ваш домен, QR пересчитается сам — перепечатывать макеты не придётся.</p>
+
+      <div class="qr-block">
+        <div class="qr-card">
+          <canvas id="qr-main" width="336" height="336" aria-label="QR-код меню"></canvas>
+          <div>
+            <h3>Меню</h3>
+            <p>Ведёт на <code id="qr-url">—</code></p>
+            <div class="qr-actions">
+              <button id="dl-png">Скачать PNG</button>
+              <a href="qr-print.html" target="_blank" rel="noopener">Лист для печати</a>
+            </div>
+          </div>
+        </div>
+        <ul class="specs">
+          <li><b>Размер</b><span>Минимум 25×25 мм на печати, для подставки — 35–45 мм.</span></li>
+          <li><b>Тихая зона</b><span>Не меньше 4 модулей вокруг кода. Не обрезайте поля.</span></li>
+          <li><b>Контраст</b><span>Тёмный код на светлом фоне. Инверсия (светлый на тёмном) ломает часть сканеров.</span></li>
+          <li><b>Материал</b><span>Матовая ламинация. Глянец и изгиб дают блики — угол сканирования теряется.</span></li>
+          <li><b>Проверка</b><span>Протестируйте с трёх телефонов: iPhone, Android, старая камера.</span></li>
+          <li><b>Адрес</b><span>Короткий и постоянный: <b>hookahplace.ru/menu</b>. Меняете адрес — меняете все макеты.</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 05 -->
+    <section class="sec" id="plan">
+      <div class="sec__head"><span class="sec__num">05</span><h2>План запуска</h2></div>
+      <p class="sec__lead">От выбора направления до QR на столах — неделя. Большая часть времени уходит не на вёрстку, а на сверку цен и фото.</p>
+
+      <div class="plan">
+        <div class="plan__step">
+          <span>День 1–2</span>
+          <b>Выбрать направление</b>
+          <p>Показать три прототипа команде, выбрать один (или гибрид) и зафиксировать правки по текстам.</p>
+        </div>
+        <div class="plan__step">
+          <span>День 3–5</span>
+          <b>Сверить меню</b>
+          <p>Актуальные цены, стоп-лист, граммовки, составы. Фото — если выбрали «Витрину».</p>
+        </div>
+        <div class="plan__step">
+          <span>День 6</span>
+          <b>Выложить и привязать домен</b>
+          <p>Загрузка на хостинг, HTTPS, короткий адрес, проверка на телефонах, QR.</p>
+        </div>
+        <div class="plan__step">
+          <span>День 7</span>
+          <b>Напечатать и разложить</b>
+          <p>Подставки, наклейки, табличка на входе. Проверить сканирование при вечернем свете.</p>
+        </div>
+      </div>
+
+      <h3 style="font-family:'Jost',sans-serif;font-weight:500;font-size:18px;margin:34px 0 0">Что нужно от заведения</h3>
+      <ul class="need">
+        <li>Подтвердить цены и составы — в прототипе они перенесены с печатного меню и требуют сверки</li>
+        <li>Фотографии позиций (по желанию) — иначе остаются иллюстрации из макета</li>
+        <li>Логотип в векторе — уже есть в макете</li>
+        <li>Ссылки на соцсети — адрес, телефоны и часы работы уже внесены</li>
+        <li>Домен и доступ к хостингу (или выбор бесплатного адреса)</li>
+        <li>Решение по языкам: нужна ли английская версия для туристов</li>
+      </ul>
+    </section>
+  </div>
+
+  <footer class="foot">
+    <div class="wrap">
+      <div class="foot__in">
+        <div>
+          <p class="foot__brand">HookahPlace · electronic menu</p>
+          <p>Прототипы: <a href="index.html" style="border-bottom:1px solid var(--line)">A «Тихий сад»</a>,
+            <a href="menu-b.html" style="border-bottom:1px solid var(--line)">B «Ночь»</a>,
+            <a href="menu-c.html" style="border-bottom:1px solid var(--line)">C «Витрина»</a></p>
+        </div>
+        <p>г. Ноябрьск, ул. Советская, 31а<br>+7 961 559-04-97 · +7 349 633-48-88<br>Вс–Чт 12:00–01:00 · Пт–Сб 12:00–03:00<br>Цены в рублях, 18+</p>
+      </div>
+      <p class="foot__note">
+        Прототип не подключён к кассе и не является офертой. Тексты и цены перенесены из печатного меню
+        и требуют финальной сверки с заведением. Иллюстрации и паттерны взяты из предоставленного макета.
+      </p>
+    </div>
+  </footer>
+</main>
+
+<script src="assets/js/qrcode.js"></script>
+<script>
+(function () {
+  const url = location.protocol === 'file:' ? 'https://hookahplace.ru/menu' : location.origin + location.pathname.replace(/(presentation|index)\.html$/, '');
+  document.getElementById('qr-url').textContent = url;
+
+  // большой canvas с QR
+  function draw(target, size) {
+    const qr = qrcode(0, 'M');
+    qr.addData(url);
+    qr.make();
+    const n = qr.getModuleCount(), margin = 3, total = n + margin * 2;
+    target.width = size; target.height = size;
+    const ctx = target.getContext('2d');
+    ctx.fillStyle = '#FBF7EC'; ctx.fillRect(0, 0, size, size);
+    const cell = size / total;
+    ctx.fillStyle = '#17130F';
+    for (let r = 0; r < n; r++) for (let c = 0; c < n; c++) {
+      if (qr.isDark(r, c)) ctx.fillRect((c + margin) * cell, (r + margin) * cell, cell + .5, cell + .5);
+    }
+    return target;
+  }
+
+  const main = document.getElementById('qr-main');
+  draw(main, 336);
+
+  // маленькие QR в макетах носителей
+  const mini = document.createElement('canvas');
+  draw(mini, 300);
+  const src = mini.toDataURL('image/png');
+  document.querySelectorAll('.qr-img').forEach(img => { img.src = src; });
+
+  document.getElementById('dl-png').addEventListener('click', () => {
+    const big = document.createElement('canvas');
+    draw(big, 1440);
+    const a = document.createElement('a');
+    a.href = big.toDataURL('image/png');
+    a.download = 'hookahplace-menu-qr.png';
+    a.click();
+  });
+})();
+</script>
+</body>
+</html>

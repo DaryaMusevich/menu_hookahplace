@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QR для столов — лист для печати · HookahPlace</title>
+<link rel="icon" href="assets/illus/logo-wine.png">
+<link rel="stylesheet" href="assets/fonts/fonts.css">
+<style>
+  :root { --wine: #AC3345; --cream: #F6F1E6; --ink: #17130F; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: #E7E1D4; color: var(--ink);
+    font-family: 'Golos Text', sans-serif;
+    padding: 24px 16px 60px;
+  }
+  .hint {
+    max-width: 190mm; margin: 0 auto 18px; font-size: 12px; line-height: 1.5;
+    color: rgba(23,19,15,.6);
+  }
+  .hint b { color: var(--ink); }
+  .sheet {
+    width: 210mm; min-height: 297mm; margin: 0 auto; background: #fff;
+    padding: 8mm; display: grid; grid-template-columns: 1fr 1fr;
+    gap: 0; box-shadow: 0 20px 60px -30px rgba(0,0,0,.4);
+  }
+  .card {
+    position: relative; height: 70mm; padding: 6mm 7mm;
+    display: flex; align-items: center; gap: 6mm;
+    border: 1px dashed rgba(23,19,15,.22);
+  }
+  .card__qr { width: 40mm; height: 40mm; flex: none; }
+  .card__qr img, .card__qr canvas { width: 100%; height: 100%; display: block; }
+  .card__txt { display: flex; flex-direction: column; gap: 2mm; }
+  .card__brand {
+    font-family: 'Jost', sans-serif; font-size: 7.5pt; font-weight: 600;
+    letter-spacing: .16em; text-transform: uppercase; line-height: 1.1;
+  }
+  .card__brand em { display: block; font-style: normal; font-size: 4.5pt; letter-spacing: .3em; opacity: .55; margin-top: 1.2mm; font-weight: 400; }
+  .card__title { font-family: 'Jost', sans-serif; font-size: 17pt; font-weight: 400; letter-spacing: .06em; line-height: 1; margin: 1mm 0; }
+  .card__sub { font-size: 6pt; letter-spacing: .18em; text-transform: uppercase; color: rgba(23,19,15,.5); }
+  .card__table {
+    position: absolute; right: 6mm; bottom: 5mm;
+    font-family: 'Jost', sans-serif; font-size: 9pt; letter-spacing: .1em;
+    color: var(--wine);
+  }
+  @media print {
+    body { background: #fff; padding: 0; }
+    .hint { display: none; }
+    .sheet { box-shadow: none; margin: 0; width: 210mm; }
+    .card { break-inside: avoid; }
+    @page { size: A4; margin: 0; }
+  }
+</style>
+</head>
+<body>
+  <p class="hint">
+    <b>Лист для печати.</b> Формат A4, 8 карточек 105×70 мм. Печать: 100% (без «по размеру страницы»), матовая бумага 250–300 г.
+    Пунктир — линия реза и сгиба. QR ведёт на <b id="hint-url">—</b>; для каждого стола добавляется метка <code>?t=N</code>, чтобы видеть статистику по столам.
+  </p>
+
+  <div class="sheet" id="sheet"></div>
+
+<script src="assets/js/qrcode.js"></script>
+<script>
+(function () {
+  const base = location.protocol === 'file:' ? 'https://hookahplace.ru/menu' : location.origin + location.pathname.replace(/qr-print\.html$/, '');
+  document.getElementById('hint-url').textContent = base.replace(/^https?:\/\//, '');
+
+  const N = 8;
+  const sheet = document.getElementById('sheet');
+  for (let i = 1; i <= N; i++) {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+      <div class="card__qr"><canvas width="480" height="480"></canvas></div>
+      <div class="card__txt">
+        <p class="card__brand">HookahPlace<em>original</em></p>
+        <p class="card__title">Меню</p>
+        <p class="card__sub">наведите камеру</p>
+      </div>
+      <span class="card__table">стол ${i}</span>`;
+    sheet.appendChild(card);
+
+    const qr = qrcode(0, 'M');
+    qr.addData(base + '?t=' + i);
+    qr.make();
+    const n = qr.getModuleCount(), margin = 3, total = n + margin * 2;
+    const cv = card.querySelector('canvas'), ctx = cv.getContext('2d');
+    const size = cv.width, cell = size / total;
+    ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, size, size);
+    ctx.fillStyle = '#17130F';
+    for (let r = 0; r < n; r++) for (let c = 0; c < n; c++) {
+      if (qr.isDark(r, c)) ctx.fillRect((c + margin) * cell, (r + margin) * cell, cell + .6, cell + .6);
+    }
+  }
+})();
+</script>
+</body>
+</html>

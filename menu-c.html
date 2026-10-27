@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F7F4ED">
+<title>Меню — HookahPlace Original</title>
+<meta name="description" content="Электронное меню HookahPlace: чаи, коктейли, лимонады, кальян, перекус.">
+<link rel="icon" href="assets/illus/logo-wine.png">
+<link rel="stylesheet" href="assets/fonts/fonts.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/c.css">
+</head>
+<body class="v-c">
+
+<header class="ch">
+  <div class="ch__row">
+    <a class="ch__brand" href="#top">
+      <img src="assets/illus/logo-wine.png" alt="" width="30">
+      <span>HookahPlace<em>original</em></span>
+    </a>
+    <button class="ch__share" data-share aria-label="Поделиться">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 16V4m0 0L8 8m4-4 4 4M4 14v5a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-5"/></svg>
+    </button>
+  </div>
+  <label class="ch__search">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m16.5 16.5 4 4"/></svg>
+    <input id="q" type="search" placeholder="Найти в меню" autocomplete="off">
+  </label>
+  <div class="tabs" id="tabs" role="tablist"></div>
+</header>
+
+<main id="top">
+  <section class="intro">
+    <h1>Меню</h1>
+    <p>Чайная карта, авторские напитки, кальян и перекус. Цены указаны за порцию, состав — на карточке.</p>
+    <div class="intro__meta">
+      <span>обновлено 28.10.2026</span>
+      <span>18+</span>
+    </div>
+  </section>
+
+  <div id="grid" class="grid"></div>
+
+  <section class="extra" id="rules">
+    <h2>Правила</h2>
+    <details class="acc" open>
+      <summary>Кальян</summary>
+      <ol id="hookah-rules"></ol>
+    </details>
+    <details class="acc">
+      <summary>В заведении</summary>
+      <ol id="house-rules"></ol>
+    </details>
+  </section>
+
+  <footer class="cf" id="contacts">
+    <div class="cf__qr">
+      <canvas class="qr" width="120" height="120" aria-label="QR-код меню"></canvas>
+      <div>
+        <p class="cf__q">Сохраните меню</p>
+        <p class="cf__qs">Наведите камеру — и меню всегда под рукой</p>
+      </div>
+    </div>
+    <div class="cf__info">
+      <p class="cf__brand">HookahPlace <em>original</em></p>
+      <p id="c-hours"></p>
+      <p><a id="c-address" href="#"></a></p>
+      <p id="c-phones" class="cf__phones"></p>
+      <p class="cf__links">
+        <a id="c-inst" target="_blank" rel="noopener">Instagram</a>
+        <a id="c-map" target="_blank" rel="noopener">Карта</a>
+      </p>
+    </div>
+    <p class="cf__note">Цены в рублях. Состав и наличие уточняйте у официанта.</p>
+  </footer>
+</main>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/ui.js"></script>
+<script src="assets/js/qrcode.js"></script>
+<script>
+(function () {
+  const M = window.MENU, V = M.venue;
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const grid = document.getElementById('grid');
+  const tabs = document.getElementById('tabs');
+
+  const art = {
+    authors: ['teapot', 'tea-bowl', 'cups', 'tea-scoop'],
+    tea: null,
+    cocktails: ['cock-1', 'cock-2', 'cock-3', 'cock-4', 'cock-5', 'cock-6'],
+    milkshakes: null,
+    lemonades: ['lem-1', 'lem-2', 'lem-3', 'lem-4', 'lem-5', 'lem-6', 'lem-7'],
+    hookah: null,
+    snacks: null
+  };
+
+  const tabsData = [{ id: 'all', label: 'Всё' }].concat(M.categories.map(c => ({ id: c.id, label: c.short })));
+  tabs.innerHTML = tabsData.map((t, i) =>
+    `<button role="tab" data-tab="${t.id}" class="${i === 0 ? 'is-active' : ''}">${esc(t.label)}</button>`).join('');
+  const tabLinks = [...tabs.querySelectorAll('button')];
+
+  const priceLabel = it => UI.prices(it).length > 1
+    ? `от ${UI.fmt(UI.prices(it)[0].price)}`
+    : UI.fmt(UI.prices(it)[0].price);
+
+  function artFor(c, i) {
+    const a = art[c.id];
+    return a ? a[i % a.length] : null;
+  }
+
+  function productCard(c, it, i) {
+    const key = c.id + '-' + i;
+    const src = artFor(c, i);
+    const inner = src
+      ? `<img src="assets/illus/${src}.png" alt="" loading="lazy">`
+      : `<span class="pcard__mono">${esc(it.name.trim()[0])}</span>`;
+    return `<button class="pcard" data-key="${key}" aria-label="${esc(it.name)}">
+      <span class="pcard__img pcard__img--${c.accent}">${inner}</span>
+      <span class="pcard__body">
+        <span class="pcard__name">${esc(it.name)}</span>
+        <span class="pcard__vol">${it.vol || ''}</span>
+        <span class="pcard__price">${priceLabel(it)}</span>
+      </span>
+    </button>`;
+  }
+
+  function section(c) {
+    if (c.kind === 'hookah') {
+      return `<section class="blk" data-sec="${c.id}">
+        <div class="blk__h"><h2>${esc(c.title)}</h2><span>${esc(c.lead)}</span></div>
+        <div class="hk">
+          ${c.items.map(it => `<div class="hk__row">
+            <div><b>${esc(it.name)}</b><i>${esc(it.desc || '')}</i></div>
+            <span>${UI.fmt(it.price)}</span>
+          </div>`).join('')}
+          <div class="hk__guests">
+            <p>Кальян на компанию</p>
+            <div>${c.guests.map(g => `<span><b>${g.count}</b>${esc(g.range)}</span>`).join('')}</div>
+          </div>
+        </div></section>`;
+    }
+    if (c.kind === 'groups') {
+      return `<section class="blk" data-sec="${c.id}">
+        <div class="blk__h"><h2>${esc(c.title)}</h2><span>${esc(c.lead)}</span></div>
+        <div class="tg">
+          ${c.groups.map(g => `<div class="tg__row">
+            <div class="tg__top"><b>${esc(g.name)}</b><span>${UI.fmt(g.price)}</span></div>
+            <div class="tg__notes">${g.notes.map(n => `<span>${esc(n)}</span>`).join('')}</div>
+          </div>`).join('')}
+        </div></section>`;
+    }
+    if (c.kind === 'lemonades') {
+      return `<section class="blk" data-sec="${c.id}">
+        <div class="blk__h"><h2>${esc(c.title)}</h2><span>${c.prices.map(p => `${p.vol} — ${UI.fmt(p.price)}`).join(' · ')}</span></div>
+        <div class="grid grid--2">
+          ${c.items.map((it, i) => {
+            const src = artFor(c, i);
+            return `<button class="pcard pcard--sm" data-key="${c.id}-${i}">
+            <span class="pcard__img pcard__img--bar"><img src="assets/illus/${src}.png" alt="" loading="lazy"></span>
+            <span class="pcard__body"><span class="pcard__name">${esc(it.name)}</span><span class="pcard__price">от ${UI.fmt(350)}</span></span>
+          </button>`;}).join('')}
+        </div></section>`;
+    }
+    return `<section class="blk" data-sec="${c.id}">
+      <div class="blk__h"><h2>${esc(c.title)}</h2><span>${esc(c.lead || '')}</span></div>
+      <div class="grid grid--2">${c.items.map((it, i) => productCard(c, it, i)).join('')}</div>
+    </section>`;
+  }
+
+  function render(id) {
+    const cats = id === 'all' ? M.categories : M.categories.filter(c => c.id === id);
+    grid.innerHTML = cats.map(section).join('');
+    UI.reveal();
+  }
+  render('all');
+
+  /* ---------- табы ---------- */
+  tabs.addEventListener('click', e => {
+    const b = e.target.closest('[data-tab]');
+    if (!b) return;
+    tabLinks.forEach(x => x.classList.toggle('is-active', x === b));
+    render(b.dataset.tab);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  /* ---------- поиск ---------- */
+  const q = document.getElementById('q');
+  let tmr;
+  q.addEventListener('input', () => {
+    clearTimeout(tmr);
+    tmr = setTimeout(() => {
+      const t = q.value.trim().toLowerCase();
+      if (t.length < 2) { render(currentTab()); return; }
+      const hits = [];
+      M.categories.forEach(c => {
+        if (c.items && c.kind !== 'groups') c.items.forEach((it, i) => {
+          const hay = (it.name + ' ' + (it.desc || '') + ' ' + (it.comp || '')).toLowerCase();
+          if (hay.includes(t)) hits.push({ c, it, i });
+        });
+        if (c.groups) c.groups.forEach(g => {
+          if ((g.name + ' ' + g.notes.join(' ')).toLowerCase().includes(t)) hits.push({ c, it: { name: g.name, price: g.price, vol: g.vol, desc: g.notes.join(', ') }, i: -1 });
+        });
+      });
+      grid.innerHTML = `<p class="hint">${hits.length ? 'Найдено: ' + hits.length : 'Ничего не нашлось'}</p>
+        <div class="grid grid--2">${hits.map(h => h.i >= 0 ? productCard(h.c, h.it, h.i)
+          : `<div class="pcard pcard--plain"><span class="pcard__body"><span class="pcard__name">${esc(h.it.name)}</span><span class="pcard__vol">${h.it.vol}</span><span class="pcard__price">${UI.fmt(h.it.price)}</span><span class="pcard__vol">${esc(h.c.title)}</span></span></div>`).join('')}</div>`;
+    }, 130);
+  });
+  function currentTab() {
+    const b = tabs.querySelector('.is-active');
+    return b ? b.dataset.tab : 'all';
+  }
+
+  /* ---------- карточка ---------- */
+  grid.addEventListener('click', e => {
+    const el = e.target.closest('[data-key]');
+    if (!el) return;
+    const [cid, idx] = el.dataset.key.split('-');
+    const c = M.categories.find(x => x.id === cid);
+    const it = c.items[+idx];
+    if (!it) return;
+    const ps = UI.prices(it);
+    const src = artFor(c, +idx);
+    UI.sheet(`
+      ${src ? `<div class="sh-img"><img src="assets/illus/${src}.png" alt=""></div>` : ''}
+      <h3>${esc(it.name)}</h3>
+      <p class="sheet__meta">${esc(c.title)}${it.vol ? ' · ' + it.vol : ''}</p>
+      <div class="sheet__prices">${ps.map(p => `<div class="sheet__price"><b>${UI.fmt(p.price)}</b><span>${p.vol}</span></div>`).join('')}</div>
+      ${it.desc ? `<p class="sheet__desc">${esc(it.desc)}</p>` : ''}
+      ${it.comp ? `<p class="sheet__comp">Состав: ${esc(it.comp)}</p>` : ''}
+      <div class="sheet__actions">
+        <button class="sheet__btn" data-share>Поделиться</button>
+        <a class="sheet__btn" href="${V.phones[0].href}">Позвать официанта</a>
+      </div>`);
+  });
+
+  /* ---------- статьи ---------- */
+  document.getElementById('hookah-rules').innerHTML = M.hookahRules.map(r => `<li>${esc(r)}</li>`).join('');
+  document.getElementById('house-rules').innerHTML = M.houseRules.map(r => `<li>${esc(r)}</li>`).join('');
+  const hoursEl = document.getElementById('c-hours');
+  hoursEl.innerHTML = (V.hours || []).join('<br>');
+  hoursEl.hidden = !(V.hours && V.hours.length);
+  const a1 = document.getElementById('c-address'); a1.textContent = V.address; a1.href = V.mapUrl;
+  document.getElementById('c-phones').innerHTML = V.phones.map(p => `<a href="${p.href}">${p.label}</a>`).join(' ');
+  document.getElementById('c-inst').href = V.instagram;
+  document.getElementById('c-map').href = V.mapUrl;
+  UI.drawQR(document.querySelector('.cf__qr canvas'), location.protocol === 'file:' ? 'https://hookahplace.ru/menu' : location.href,
+    { dark: '#17130F', light: '#FFFFFF', margin: 2 });
+
+  document.addEventListener('click', e => {
+    if (e.target.closest('[data-share]')) UI.share({ title: 'Меню HookahPlace' });
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#AC3345">
+<title>Меню — HookahPlace Original</title>
+<meta name="description" content="Электронное меню HookahPlace, Ноябрьск: авторские чаи, чайная карта, коктейли, лимонады, кальян и перекус.">
+<link rel="icon" href="assets/illus/logo-wine.png">
+<link rel="stylesheet" href="assets/fonts/fonts.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/a.css">
+</head>
+<body class="v-a">
+
+<header class="top">
+  <a class="brand" href="#top">
+    <img class="brand__mark" src="assets/illus/logo-wine.png" alt="" width="30" height="24">
+    <span class="brand__name">HookahPlace<em>original</em></span>
+  </a>
+  <div class="top__tools">
+    <div class="lang" role="group" aria-label="Язык меню / Menu language">
+      <button type="button" data-lang="ru" aria-pressed="true">RU</button>
+      <button type="button" data-lang="en" aria-pressed="false">EN</button>
+    </div>
+    <button class="share-btn" type="button" data-share aria-label="Поделиться меню">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 16V4m0 0L8 8m4-4 4 4M4 14v5a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-5"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="top">
+  <section class="cover">
+    <div class="cover__frame"></div>
+    <div class="cover__top">
+      <p class="cover__kicker">HookahPlace&nbsp;·&nbsp;Original</p>
+      <img class="cover__seal" src="assets/illus/logo-cream.png" alt="" aria-hidden="true">
+    </div>
+    <div class="cover__inner">
+      <h1 class="cover__title" id="cover-title">Меню</h1>
+      <div class="cover__bottom">
+        <p class="cover__sub" id="cover-sub">Чай · кальян · лимонады</p>
+        <p class="cover__quote"><span id="cover-quote">«Гармония превыше всего»</span><br><span id="cover-by">— японская пословица</span></p>
+      </div>
+    </div>
+  </section>
+
+  <nav class="toc" id="toc" aria-label="Разделы меню"></nav>
+
+  <div id="menu"></div>
+
+  <section class="sec rules" id="rules">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="sec-num">08</span>
+        <h2 id="rules-title">Правила</h2>
+      </div>
+      <p class="sec-lead" id="rules-lead">Просим с уважением отнестись к нескольким правилам — они помогают сохранить гармонию в HookahPlace.</p>
+
+      <h3 class="rules__title" id="rules-hookah">Кальян</h3>
+      <ol class="rules__list" id="hookah-rules"></ol>
+
+      <h3 class="rules__title" id="rules-house">В заведении</h3>
+      <ol class="rules__list" id="house-rules"></ol>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot__grid">
+      <div class="foot__qr">
+        <canvas class="qr" width="120" height="120" aria-label="QR-код меню"></canvas>
+        <p id="qr-note">Наведите камеру —<br>меню всегда с собой</p>
+      </div>
+      <div class="foot__contacts">
+        <p class="foot__brand">HookahPlace<em>original</em></p>
+        <p id="f-hours"></p>
+        <p><a id="f-address" href="#"></a></p>
+        <div id="f-phones" class="foot__phones"></div>
+        <p class="foot__links">
+          <a id="f-inst" target="_blank" rel="noopener">Instagram</a>
+          <a id="f-map" target="_blank" rel="noopener">На карте</a>
+        </p>
+      </div>
+    </div>
+    <p class="foot__note" id="foot-note">Цены указаны в рублях. Состав и наличие уточняйте у официанта. 18+</p>
+  </div>
+</footer>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/data-en.js"></script>
+<script src="assets/js/ui.js"></script>
+<script src="assets/js/qrcode.js"></script>
+<script>
+(function () {
+  const DICT = { ru: window.MENU, en: window.MENU_EN };
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+  const params = new URLSearchParams(location.search);
+  const stored = localStorage.getItem('hp-menu-lang');
+  let lang = params.get('lang') || stored || ((navigator.language || '').toLowerCase().startsWith('ru') ? 'ru' : 'en');
+  if (!DICT[lang]) lang = 'ru';
+
+  const nav = $('toc');
+  const menu = $('menu');
+
+  function setLang(l, opts) {
+    lang = DICT[l] ? l : 'ru';
+    try { localStorage.setItem('hp-menu-lang', lang); } catch (e) {}
+    document.documentElement.lang = lang;
+    document.querySelectorAll('[data-lang]').forEach(b => {
+      const on = b.dataset.lang === lang;
+      b.classList.toggle('is-active', on);
+      b.setAttribute('aria-pressed', String(on));
+    });
+    render();
+    if (opts && opts.push) {
+      const url = new URL(location.href);
+      url.searchParams.set('lang', lang);
+      history.replaceState(null, '', url);
+    }
+  }
+
+  const head = (c, lead) => `
+    <div class="sec-head reveal">
+      <span class="sec-num">${c.num}</span>
+      <h2>${esc(c.title)}</h2>
+    </div>
+    ${lead ? `<p class="sec-lead reveal">${esc(lead)}</p>` : ''}`;
+
+  function itemRow(it, U) {
+    const ps = UI.prices(it);
+    const main = ps[0], rest = ps.slice(1);
+    const volText = rest.length
+      ? `<span class="item__vol">${ps.map(p => `${p.vol} — ${UI.fmt(p.price)}`).join('<br>')}</span>`
+      : `<span class="item__vol">${it.vol || ''}</span>`;
+    return `
+      <li class="item reveal">
+        <div class="item__top">
+          <h3 class="item__name">${esc(it.name)}</h3>
+          <span class="item__dots"></span>
+          <span class="item__price">${UI.fmt(main.price)}</span>
+        </div>
+        <div class="item__under">
+          ${it.desc ? `<p class="item__desc">${esc(it.desc)}</p>` : ''}
+          <div class="item__foot">
+            ${volText}
+            ${it.comp ? `<button class="item__more" data-comp type="button">${esc(U.composition)}<span>+</span></button>` : '<span></span>'}
+          </div>
+          ${it.comp ? `<p class="item__comp" hidden>${esc(it.comp)}</p>` : ''}
+        </div>
+      </li>`;
+  }
+
+  function render() {
+    const M = DICT[lang], V = M.venue, U = M.ui;
+
+    document.title = `${U.menu} — HookahPlace Original`;
+    $('cover-title').textContent = U.menu;
+    $('cover-sub').textContent = U.menuSub;
+    $('cover-quote').textContent = U.quote;
+    $('cover-by').textContent = U.quoteBy;
+    $('rules-title').textContent = U.rules;
+    $('rules-lead').textContent = U.rulesLead;
+    $('rules-hookah').textContent = U.rulesHookah;
+    $('rules-house').textContent = U.rulesHouse;
+    $('foot-note').textContent = U.footNote;
+    $('qr-note').innerHTML = U.qrNote;
+    const shareBtn = document.querySelector('[data-share]');
+    if (shareBtn) shareBtn.setAttribute('aria-label', U.share);
+    nav.setAttribute('aria-label', U.menu);
+
+    /* навигация */
+    nav.innerHTML = M.categories.map(c =>
+      `<a href="#${c.id}" data-id="${c.id}"><i>${c.num}</i>${esc(c.short)}</a>`).join('')
+      + `<a href="#rules" data-id="rules"><i>08</i>${esc(U.rules)}</a>`;
+    const links = [...nav.querySelectorAll('a')];
+
+    /* разделы */
+    const out = [];
+    M.categories.forEach(c => {
+      let body = '';
+
+      if (c.kind === 'items') {
+        body = `<ul class="items">${c.items.map(it => itemRow(it, U)).join('')}</ul>`;
+      }
+
+      if (c.kind === 'groups') {
+        body = c.groups.map(g => `
+          <div class="group reveal">
+            <div class="item__top">
+              <h3 class="group__name">${esc(g.name)}</h3>
+              <span class="item__dots"></span>
+              <span class="item__price">${UI.fmt(g.price)}</span>
+            </div>
+            <p class="group__vol">${g.vol}</p>
+            <ul class="group__notes">${g.notes.map(n => `<li>${esc(n)}</li>`).join('')}</ul>
+          </div>`).join('');
+      }
+
+      if (c.kind === 'lemonades') {
+        body = `
+          <div class="lem-prices reveal">
+            ${c.prices.map(p => `<span><b>${UI.fmt(p.price)}</b><i>${p.vol}</i></span>`).join('')}
+          </div>
+          <ul class="lem">
+            ${c.items.map((it, i) => `
+              <li class="lem__item reveal">
+                <span class="lem__n">${String(i + 1).padStart(2, '0')}</span>
+                <span class="lem__name">${esc(it.name)}</span>
+              </li>`).join('')}
+          </ul>
+          <figure class="lem-fig reveal"><img src="assets/illus/blossom.png" alt="" loading="lazy"></figure>`;
+      }
+
+      if (c.kind === 'hookah') {
+        body = `
+          <div class="night reveal">
+            <img class="night__clouds" src="assets/illus/clouds.png" alt="" aria-hidden="true">
+            <div class="night__in">
+              <p class="night__label">${esc(U.hookahLabel)}</p>
+              ${c.items.map(it => `
+                <div class="hrow">
+                  <div class="hrow__top">
+                    <h3>${esc(it.name)}</h3>
+                    <span class="item__dots"></span>
+                    <span class="item__price">${UI.fmt(it.price)}</span>
+                  </div>
+                  <p class="hrow__desc">${esc(it.desc || '')}</p>
+                </div>`).join('')}
+              <div class="guests">
+                <p class="guests__cap">${esc(U.guestsCaption)}</p>
+                <div class="guests__grid">
+                  ${c.guests.map(g => `<div><i>${esc(g.range)}</i><b>${g.count}</b></div>`).join('')}
+                </div>
+              </div>
+              <p class="night__note">${esc(U.hookahNote)}</p>
+            </div>
+          </div>`;
+      }
+
+      out.push(`<section class="sec" id="${c.id}"><div class="wrap">${head(c, c.lead)}${body}</div></section>`);
+    });
+    menu.innerHTML = out.join('');
+
+    /* правила */
+    $('hookah-rules').innerHTML = M.hookahRules.map(r => `<li>${esc(r)}</li>`).join('');
+    $('house-rules').innerHTML = M.houseRules.map(r => `<li>${esc(r)}</li>`).join('');
+
+    /* контакты */
+    const hoursEl = $('f-hours');
+    hoursEl.innerHTML = (V.hours || []).join('<br>');
+    hoursEl.hidden = !(V.hours && V.hours.length);
+    const addr = $('f-address');
+    addr.textContent = V.address;
+    addr.href = V.mapUrl;
+    $('f-phones').innerHTML = (V.phones || []).map(p =>
+      `<a href="${p.href}">${esc(p.label)}</a>`).join('');
+    $('f-inst').href = V.instagram;
+    $('f-inst').textContent = U.instagram;
+    $('f-map').href = V.mapUrl;
+    $('f-map').textContent = U.map;
+
+    UI.scrollSpy([...document.querySelectorAll('section.sec[id]')], links);
+    UI.reveal();
+    resetNav();
+  }
+
+  /* активный раздел на самом верху */
+  function resetNav() {
+    const links = [...nav.querySelectorAll('a')];
+    if (window.scrollY < 240 && links[0]) {
+      links.forEach(l => l.classList.remove('is-active'));
+      links[0].classList.add('is-active');
+    }
+  }
+
+  /* ---------- события ---------- */
+  document.addEventListener('click', e => {
+    const langBtn = e.target.closest('[data-lang]');
+    if (langBtn) { setLang(langBtn.dataset.lang, { push: true }); return; }
+
+    const btn = e.target.closest('[data-comp]');
+    if (btn) {
+      const li = btn.closest('.item');
+      const comp = li.querySelector('.item__comp');
+      const open = comp.hasAttribute('hidden');
+      if (open) comp.removeAttribute('hidden'); else comp.setAttribute('hidden', '');
+      btn.classList.toggle('is-open', open);
+      btn.lastElementChild.textContent = open ? '−' : '+';
+      return;
+    }
+
+    if (e.target.closest('[data-share]')) UI.share({ title: `${DICT[lang].ui.menu} — HookahPlace` });
+  });
+
+  /* ---------- QR ---------- */
+  const url = location.protocol === 'file:' ? 'https://hookahplace.ru/menu' : location.origin + location.pathname;
+  UI.drawQR(document.querySelector('.foot__qr canvas'), url, { dark: '#F6F1E6', light: '#AC3345', margin: 2 });
+
+  setLang(lang, { push: !!params.get('lang') });
+})();
+</script>
+</body>
+</html>

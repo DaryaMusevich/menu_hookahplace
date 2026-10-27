@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#12100D">
+<title>Меню — HookahPlace Original</title>
+<meta name="description" content="Электронное меню HookahPlace: чай, коктейли, лимонады, кальян.">
+<link rel="icon" href="assets/illus/logo-wine.png">
+<link rel="stylesheet" href="assets/fonts/fonts.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/b.css">
+</head>
+<body class="v-b">
+
+<header class="bh">
+  <div class="bh__row">
+    <a class="bh__brand" href="#top">
+      <img src="assets/illus/logo-cream.png" alt="" width="34">
+      <span>HookahPlace<em>original</em></span>
+    </a>
+    <div class="bh__tools">
+      <button class="bh__icon" data-share aria-label="Поделиться меню">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 16V4m0 0L8 8m4-4 4 4M4 14v5a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-5"/></svg>
+      </button>
+    </div>
+  </div>
+  <label class="search">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m16.5 16.5 4 4"/></svg>
+    <input id="q" type="search" placeholder="Чай, кальян, лимонад…" autocomplete="off" enterkeyhint="search">
+    <button type="button" class="search__clear" id="clear" hidden aria-label="Очистить">✕</button>
+  </label>
+</header>
+
+<div class="chips" id="chips" role="tablist" aria-label="Разделы"></div>
+
+<main id="top">
+  <section class="hero">
+    <p class="hero__kicker">чайная · кальянная · original</p>
+    <h1 class="hero__title">Ночь<br>начинается<br>с чая</h1>
+    <p class="hero__sub">От авторских чаёв до кальяна —<br>всё меню в одном экране.</p>
+    <div class="hero__scroll" aria-hidden="true"><span></span>листайте</div>
+  </section>
+
+  <div id="list" class="list"></div>
+
+  <section class="rules" id="rules">
+    <h2 class="rules__h">Правила</h2>
+    <p class="rules__lead">Они помогают сохранить гармонию в HookahPlace.</p>
+    <details class="acc" open>
+      <summary>Кальян</summary>
+      <ol id="hookah-rules"></ol>
+    </details>
+    <details class="acc">
+      <summary>В заведении</summary>
+      <ol id="house-rules"></ol>
+    </details>
+  </section>
+
+  <section class="contacts" id="contacts">
+    <img class="contacts__logo" src="assets/illus/logo-cream.png" alt="">
+    <p class="contacts__name">HookahPlace <em>original</em></p>
+    <p id="c-hours"></p>
+    <p><a id="c-address" href="#"></a></p>
+    <div id="c-phones" class="contacts__phones"></div>
+    <div class="contacts__links">
+      <a id="c-inst" target="_blank" rel="noopener">Instagram</a>
+      <a id="c-map" target="_blank" rel="noopener">Карта</a>
+    </div>
+    <div class="qr-card contacts__qr">
+      <canvas class="qr" width="116" height="116" aria-label="QR-код меню"></canvas>
+      <p class="qr-card__text">Сохраните меню —<br>оно всегда под рукой</p>
+    </div>
+    <p class="contacts__note">18+ · Цены в рублях · Состав уточняйте у официанта</p>
+  </section>
+</main>
+
+<nav class="bnav" aria-label="Навигация">
+  <a href="#top" class="is-active">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5h16M4 12h16M4 19h10"/></svg>
+    <span>Меню</span>
+  </a>
+  <a href="#hookah">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 21h10M12 21v-7M8 14h8M12 7c2.5-1 2.5-3 0-4 0 2-4 3-4 6a4 4 0 0 0 8 0c0-3-4-4-4-6"/></svg>
+    <span>Кальян</span>
+  </a>
+  <a href="#rules">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 4h9l4 4v12H6z"/><path d="M9 11h7M9 15h5"/></svg>
+    <span>Правила</span>
+  </a>
+  <a href="#contacts">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 21s7-6 7-11a7 7 0 1 0-14 0c0 5 7 11 7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>
+    <span>Контакты</span>
+  </a>
+</nav>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/ui.js"></script>
+<script src="assets/js/qrcode.js"></script>
+<script>
+(function () {
+  const M = window.MENU, V = M.venue;
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const list = document.getElementById('list');
+  const chips = document.getElementById('chips');
+
+  /* ---------- чипсы ---------- */
+  const chipData = [{ id: 'all', label: 'Всё' }].concat(
+    M.categories.map(c => ({ id: c.id, label: c.short }))
+  );
+  chips.innerHTML = chipData.map((c, i) =>
+    `<button role="tab" data-chip="${c.id}" class="${i === 0 ? 'is-active' : ''}" aria-selected="${i === 0}">${esc(c.label)}</button>`
+  ).join('');
+
+  /* ---------- карточка ---------- */
+  function card(cat, it, idx) {
+    const ps = UI.prices(it);
+    return `
+      <article class="card" data-cat="${cat.id}" data-i="${idx}" tabindex="0" role="button" aria-label="${esc(it.name)}">
+        <div class="card__top">
+          <h3>${esc(it.name)}</h3>
+          <span class="card__p">${UI.fmt(ps[0].price)}</span>
+        </div>
+        ${it.desc ? `<p class="card__d">${esc(it.desc)}</p>` : ''}
+        <div class="card__m">
+          <span>${ps.length > 1 ? ps.map(p => p.vol).join(' / ') : (it.vol || '')}</span>
+          ${it.tags && it.tags.includes('крепкий') ? '<span class="tag tag--hot">крепкий</span>' : ''}
+        </div>
+      </article>`;
+  }
+
+  /* ---------- кальян ---------- */
+  function hookahBlock(c) {
+    return `
+      <div class="hookah" id="hookah">
+        <img class="hookah__clouds" src="assets/illus/clouds.png" alt="" aria-hidden="true">
+        <h2 class="hookah__h">Кальян</h2>
+        <p class="hookah__lead">${esc(c.lead)}</p>
+        <div class="hookah__rows">
+          ${c.items.map(it => `
+            <div class="hrow">
+              <div class="hrow__t"><h3>${esc(it.name)}</h3><span class="hrow__p">${UI.fmt(it.price)}</span></div>
+              <p class="hrow__d">${esc(it.desc || '')}</p>
+            </div>`).join('')}
+        </div>
+        <div class="calc">
+          <div class="calc__head">
+            <span>Сколько вас?</span>
+            <output id="calc-out">4</output>
+          </div>
+          <input type="range" id="calc" min="1" max="9" value="4" step="1" aria-label="Количество гостей">
+          <p class="calc__res" id="calc-res"></p>
+        </div>
+        <p class="hookah__note">Каждый кальян курится не более 90 минут с момента подачи.</p>
+      </div>`;
+  }
+
+  /* ---------- рендер ---------- */
+  function render(filter) {
+    const cat = filter && filter !== 'all' ? M.categories.filter(c => c.id === filter) : M.categories;
+    list.innerHTML = cat.map(c => {
+      if (c.kind === 'hookah') return hookahBlock(c);
+      if (c.kind === 'lemonades') {
+        return `<section class="grp" data-id="${c.id}">
+          <div class="grp__h"><h2>${esc(c.title)}</h2><span>${c.prices.map(p => p.vol + ' — ' + UI.fmt(p.price)).join(' · ')}</span></div>
+          <div class="cards cards--3">
+            ${c.items.map((it, i) => `<div class="lem" data-cat="${c.id}" data-i="${i}" tabindex="0" role="button">
+              <span class="lem__n">${String(i + 1).padStart(2, '0')}</span>
+              <span>${esc(it.name)}</span></div>`).join('')}
+          </div></section>`;
+      }
+      if (c.kind === 'groups') {
+        return `<section class="grp" data-id="${c.id}">
+          <div class="grp__h"><h2>${esc(c.title)}</h2><span>${esc(c.lead)}</span></div>
+          <div class="teas">
+            ${c.groups.map(g => `<div class="tea">
+              <div class="tea__h"><span>${esc(g.name)}</span><span class="tea__p">${UI.fmt(g.price)}</span></div>
+              <p class="tea__v">${g.vol}</p>
+              <ul>${g.notes.map(n => `<li>${esc(n)}</li>`).join('')}</ul>
+            </div>`).join('')}
+          </div></section>`;
+      }
+      return `<section class="grp" data-id="${c.id}">
+        <div class="grp__h"><h2>${esc(c.title)}</h2><span>${esc(c.lead || '')}</span></div>
+        <div class="cards">${c.items.map((it, i) => card(c, it, i)).join('')}</div></section>`;
+    }).join('');
+    initCalc();
+    UI.reveal();
+  }
+  render('all');
+
+  /* ---------- калькулятор ---------- */
+  function initCalc() {
+    const r = document.getElementById('calc');
+    if (!r) return;
+    const out = document.getElementById('calc-out');
+    const res = document.getElementById('calc-res');
+    const upd = () => {
+      const g = +r.value;
+      const n = g <= 3 ? 1 : g <= 5 ? 2 : g <= 7 ? 3 : 4;
+      out.textContent = g;
+      res.innerHTML = `Рекомендуем <b>${n}</b> ${n === 1 ? 'кальян' : n < 5 ? 'кальяна' : 'кальянов'} — <b>${UI.fmt(n * 1900)}</b>`;
+    };
+    r.addEventListener('input', upd);
+    upd();
+  }
+
+  /* ---------- поиск и фильтры ---------- */
+  const q = document.getElementById('q');
+  const clear = document.getElementById('clear');
+
+  function search(term) {
+    const t = term.trim().toLowerCase();
+    if (t.length < 2) { render(activeChip); return; }
+    const hits = [];
+    M.categories.forEach(c => {
+      if (c.kind === 'items' || c.kind === 'hookah') {
+        (c.items || []).forEach((it, i) => {
+          const hay = (it.name + ' ' + (it.desc || '') + ' ' + (it.comp || '') + ' ' + (it.tags || []).join(' ')).toLowerCase();
+          if (hay.includes(t)) hits.push({ c, it, i });
+        });
+      } else if (c.kind === 'lemonades') {
+        c.items.forEach((it, i) => { if (it.name.toLowerCase().includes(t)) hits.push({ c, it, i }); });
+      } else if (c.kind === 'groups') {
+        c.groups.forEach(g => { if ((g.name + ' ' + g.notes.join(' ')).toLowerCase().includes(t)) hits.push({ c, it: { name: g.name, price: g.price, vol: g.vol, desc: g.notes.join(', ') }, i: -1, g }); });
+      }
+    });
+    list.innerHTML = `<p class="hits">${hits.length ? 'Найдено: ' + hits.length : 'Ничего не нашлось — попробуйте «чай» или «кальян»'}</p>` +
+      (hits.length ? `<div class="cards">${hits.map(h => h.i >= 0
+        ? card(h.c, h.it, h.i)
+        : `<article class="card"><div class="card__top"><h3>${esc(h.it.name)}</h3><span class="card__p">${UI.fmt(h.it.price)}</span></div><p class="card__d">${esc(h.it.desc)}</p><div class="card__m"><span>${h.it.vol}</span><span class="tag">${esc(h.c.title)}</span></div></article>`
+      ).join('')}</div>` : '');
+  }
+
+  let activeChip = 'all';
+  chips.addEventListener('click', e => {
+    const b = e.target.closest('[data-chip]');
+    if (!b) return;
+    activeChip = b.dataset.chip;
+    chips.querySelectorAll('button').forEach(x => {
+      x.classList.toggle('is-active', x === b);
+      x.setAttribute('aria-selected', x === b);
+    });
+    q.value = ''; clear.hidden = true;
+    if (activeChip === 'all') { render('all'); window.scrollTo({ top: 0 }); }
+    else {
+      render(activeChip);
+      const el = document.querySelector('.grp') || document.getElementById('hookah');
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+
+  let tmr;
+  q.addEventListener('input', () => {
+    clear.hidden = !q.value;
+    clearTimeout(tmr);
+    tmr = setTimeout(() => search(q.value), 120);
+  });
+  clear.addEventListener('click', () => { q.value = ''; clear.hidden = true; render(activeChip); q.focus(); });
+
+  /* ---------- карточка → шторка ---------- */
+  list.addEventListener('click', e => {
+    const el = e.target.closest('[data-cat]');
+    if (!el) return;
+    const c = M.categories.find(x => x.id === el.dataset.cat);
+    const it = c.items[+el.dataset.i];
+    if (!it) return;
+    const ps = UI.prices(it);
+    UI.sheet(`
+      <h3>${esc(it.name)}</h3>
+      <p class="sheet__meta">${esc(c.title)}${it.vol ? ' · ' + it.vol : ''}</p>
+      <div class="sheet__prices">${ps.map(p => `<div class="sheet__price"><b>${UI.fmt(p.price)}</b><span>${p.vol}</span></div>`).join('')}</div>
+      ${it.desc ? `<p class="sheet__desc">${esc(it.desc)}</p>` : ''}
+      ${it.comp ? `<p class="sheet__comp">Состав: ${esc(it.comp)}</p>` : ''}
+      <div class="sheet__actions">
+        <button class="sheet__btn" data-share>Поделиться</button>
+        <a class="sheet__btn" href="${V.phones[0].href}">Позвать мастера</a>
+      </div>`);
+  });
+
+  /* ---------- правила, контакты, QR ---------- */
+  document.getElementById('hookah-rules').innerHTML = M.hookahRules.map(r => `<li>${esc(r)}</li>`).join('');
+  document.getElementById('house-rules').innerHTML = M.houseRules.map(r => `<li>${esc(r)}</li>`).join('');
+  const hoursEl = document.getElementById('c-hours');
+  hoursEl.innerHTML = (V.hours || []).join('<br>');
+  hoursEl.hidden = !(V.hours && V.hours.length);
+  const a1 = document.getElementById('c-address'); a1.textContent = V.address; a1.href = V.mapUrl;
+  document.getElementById('c-phones').innerHTML = V.phones.map(p => `<a href="${p.href}">${p.label}</a>`).join('');
+  document.getElementById('c-inst').href = V.instagram;
+  document.getElementById('c-map').href = V.mapUrl;
+  UI.drawQR(document.querySelector('.contacts__qr canvas'), location.protocol === 'file:' ? 'https://hookahplace.ru/menu' : location.href,
+    { dark: '#12100D', light: '#F2E9DC', margin: 2 });
+
+  document.addEventListener('click', e => {
+    if (e.target.closest('[data-share]')) UI.share({ title: 'Меню HookahPlace' });
+  });
+
+  /* ---------- нижняя навигация ---------- */
+  const navLinks = [...document.querySelectorAll('.bnav a')];
+  UI.scrollSpy([...document.querySelectorAll('#top, .hookah, #rules, #contacts')].filter(Boolean), navLinks);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,291 @@
+/* ==================================================================
+   ВАРИАНТ B — «Ночь»
+   Тёмный лаунж: тёплый уголь, золото, Cormorant. Поиск, фильтры,
+   калькулятор кальянов, нижняя навигация.
+   ================================================================== */
+
+.v-b {
+  --bg: #12100D;
+  --surface: #1B1613;
+  --surface-2: #221B17;
+  --ink: #F2E9DC;
+  --dim: rgba(242, 233, 220, .58);
+  --line: rgba(242, 233, 220, .13);
+  --gold: #D9A66A;
+  --wine: #C25562;
+  background: var(--bg);
+  color: var(--ink);
+  font-size: 15px;
+  padding-bottom: calc(78px + env(safe-area-inset-bottom));
+  overflow-x: hidden;
+  background-image: radial-gradient(120% 60% at 50% 0%, rgba(194, 85, 98, .14), transparent 70%);
+  background-repeat: no-repeat;
+}
+
+/* ---------- Шапка ---------- */
+.bh {
+  position: sticky; top: 0; z-index: 60;
+  padding: 12px 18px 10px;
+  background: linear-gradient(180deg, rgba(18, 16, 13, .97) 60%, rgba(18, 16, 13, .86));
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--line);
+}
+.bh__row { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+.bh__brand { display: flex; align-items: center; gap: 10px; }
+.bh__brand img { width: 30px; opacity: .95; }
+.bh__brand span {
+  font-family: 'Cormorant', serif; font-size: 19px; letter-spacing: .02em; line-height: 1;
+}
+.bh__brand em {
+  display: block; font-style: normal; font-family: 'Golos Text', sans-serif;
+  font-size: 7.5px; letter-spacing: .34em; text-transform: uppercase;
+  opacity: .5; margin-top: 4px;
+}
+.bh__icon {
+  width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center;
+  border: 1px solid var(--line); color: var(--ink);
+}
+.search {
+  display: flex; align-items: center; gap: 10px;
+  padding: 0 14px; height: 42px; border-radius: 12px;
+  background: var(--surface); border: 1px solid var(--line); color: var(--dim);
+}
+.search input {
+  flex: 1; min-width: 0; background: none; border: 0; outline: none;
+  color: var(--ink); font: inherit; font-size: 14px;
+}
+.search input::placeholder { color: rgba(242, 233, 220, .38); }
+.search__clear { font-size: 13px; color: var(--dim); padding: 4px; }
+
+@media (min-width: 960px) {
+  .hero, .list, .rules, .contacts { max-width: 900px; margin-left: auto; margin-right: auto; }
+  .bh__row, .search, .chips { max-width: 936px; margin-left: auto; margin-right: auto; }
+  .cards { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* ---------- Чипсы ---------- */
+.chips {
+  position: sticky; top: 118px; z-index: 55;
+  display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none;
+  padding: 12px 18px;
+  background: linear-gradient(180deg, rgba(18, 16, 13, .98), rgba(18, 16, 13, .92));
+  border-bottom: 1px solid var(--line);
+}
+.chips::-webkit-scrollbar { display: none; }
+.chips button {
+  flex: none; padding: 8px 15px; border-radius: 99px; font-size: 12px;
+  letter-spacing: .04em; color: var(--dim); border: 1px solid var(--line);
+  transition: color .2s, background .2s, border-color .2s;
+}
+.chips button.is-active { background: var(--gold); border-color: var(--gold); color: #17120E; font-weight: 500; }
+
+/* ---------- Обложка ---------- */
+.hero { padding: 34px 22px 30px; position: relative; }
+.hero__kicker {
+  font-size: 9.5px; letter-spacing: .34em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 16px;
+}
+.hero__title {
+  font-family: 'Cormorant', serif; font-weight: 300;
+  font-size: clamp(42px, 12.6vw, 58px); line-height: .96;
+  letter-spacing: -.015em; margin-bottom: 20px;
+}
+.hero__sub { font-size: 13.5px; line-height: 1.55; color: var(--dim); max-width: 30ch; }
+.hero__scroll {
+  display: flex; align-items: center; gap: 10px; margin-top: 28px;
+  font-size: 9.5px; letter-spacing: .22em; text-transform: uppercase; color: rgba(242, 233, 220, .38);
+}
+.hero__scroll span {
+  width: 46px; height: 1px; background: linear-gradient(90deg, var(--gold), transparent);
+}
+
+/* ---------- Группы и карточки ---------- */
+.list { padding: 0 18px; }
+.grp { padding: 22px 0 8px; scroll-margin-top: 170px; }
+.grp__h { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+.grp__h h2 {
+  font-family: 'Cormorant', serif; font-weight: 400; font-size: 27px;
+  letter-spacing: .01em; line-height: 1.1;
+}
+.grp__h span { font-size: 12px; line-height: 1.45; color: var(--dim); max-width: 42ch; }
+
+.cards { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.card {
+  display: flex; flex-direction: column; gap: 8px;
+  padding: 14px 13px 12px; border-radius: 15px;
+  background: linear-gradient(160deg, var(--surface-2), var(--surface));
+  border: 1px solid var(--line);
+  cursor: pointer; transition: border-color .2s, transform .12s;
+  -webkit-tap-highlight-color: transparent;
+}
+.card:active { transform: scale(.985); border-color: rgba(217, 166, 106, .5); }
+.card__top { display: flex; flex-direction: column; gap: 3px; }
+.card__top h3 {
+  font-family: 'Cormorant', serif; font-weight: 500; font-size: 19.5px;
+  line-height: 1.12; letter-spacing: .005em;
+}
+.card__p { font-size: 14px; color: var(--gold); font-variant-numeric: tabular-nums; }
+.card__d {
+  font-size: 11.5px; line-height: 1.45; color: var(--dim);
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+}
+.card__m {
+  display: flex; align-items: center; justify-content: space-between; gap: 6px;
+  margin-top: auto; padding-top: 6px; border-top: 1px solid rgba(242, 233, 220, .08);
+  font-size: 9.5px; letter-spacing: .1em; text-transform: uppercase; color: rgba(242, 233, 220, .45);
+}
+.tag {
+  font-size: 9px; letter-spacing: .08em; text-transform: uppercase;
+  padding: 3px 7px; border-radius: 99px; border: 1px solid rgba(194, 85, 98, .5); color: var(--wine);
+}
+.tag--hot { border-color: rgba(217, 166, 106, .45); color: var(--gold); }
+
+.cards--3 { grid-template-columns: 1fr 1fr; }
+.lem {
+  display: flex; align-items: baseline; gap: 9px; padding: 12px 14px;
+  border-radius: 12px; background: var(--surface); border: 1px solid var(--line);
+  font-size: 13px; line-height: 1.3; cursor: pointer;
+}
+.lem__n { font-size: 9px; color: var(--gold); letter-spacing: .06em; }
+
+.hits { font-size: 12px; color: var(--dim); padding: 10px 0 14px; letter-spacing: .04em; }
+
+/* ---------- Чайные карты ---------- */
+.teas { display: grid; gap: 10px; }
+.tea {
+  padding: 14px 16px 12px; border-radius: 14px;
+  background: var(--surface); border: 1px solid var(--line);
+}
+.tea__h { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+.tea__h span:first-child {
+  font-family: 'Cormorant', serif; font-size: 19px; letter-spacing: .01em;
+}
+.tea__p { color: var(--gold); font-size: 15px; }
+.tea__v { font-size: 9.5px; letter-spacing: .12em; text-transform: uppercase; color: rgba(242, 233, 220, .4); margin: 2px 0 8px; }
+.tea ul { display: grid; grid-template-columns: 1fr 1fr; gap: 2px 14px; }
+.tea li { font-size: 12px; line-height: 1.5; color: rgba(242, 233, 220, .78); }
+
+/* ---------- Кальян ---------- */
+.hookah {
+  position: relative; overflow: hidden; isolation: isolate;
+  margin: 26px -18px 10px; padding: 28px 22px 26px;
+  background: linear-gradient(170deg, #1E1713, #131009 80%);
+  border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+  scroll-margin-top: 150px;
+}
+.hookah__clouds {
+  position: absolute; right: -50px; top: -10px; width: 240px;
+  opacity: .18; filter: invert(1); z-index: -1;
+  -webkit-mask-image: linear-gradient(250deg, #000 25%, transparent 75%);
+  mask-image: linear-gradient(250deg, #000 25%, transparent 75%);
+}
+.hookah__h { font-family: 'Cormorant', serif; font-size: 30px; font-weight: 400; margin-bottom: 8px; }
+.hookah__lead { font-size: 12.5px; line-height: 1.5; color: var(--dim); max-width: 40ch; margin-bottom: 20px; }
+.hookah__rows { display: grid; gap: 14px; }
+.hrow__t { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+.hrow__t h3 { font-family: 'Cormorant', serif; font-size: 21px; font-weight: 500; }
+.hrow__p { color: var(--gold); font-size: 16px; }
+.hrow__d { font-size: 11.5px; color: var(--dim); margin-top: 2px; max-width: 40ch; }
+
+.calc {
+  margin-top: 22px; padding: 16px; border-radius: 14px;
+  background: rgba(18, 16, 13, .6); border: 1px solid rgba(217, 166, 106, .22);
+}
+.calc__head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: var(--dim);
+}
+.calc__head output { font-family: 'Cormorant', serif; font-size: 26px; color: var(--gold); letter-spacing: 0; }
+.calc input[type=range] {
+  -webkit-appearance: none; appearance: none; width: 100%; height: 2px;
+  background: rgba(242, 233, 220, .2); margin: 14px 0 12px; border-radius: 2px;
+}
+.calc input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 22px; height: 22px; border-radius: 50%;
+  background: var(--gold); border: 3px solid #17120E; box-shadow: 0 0 0 1px var(--gold);
+}
+.calc__res { font-size: 12px; color: var(--dim); }
+.calc__res b { color: var(--ink); font-weight: 500; }
+.hookah__note { font-size: 10.5px; color: rgba(242, 233, 220, .38); margin-top: 14px; }
+
+/* ---------- Правила ---------- */
+.rules { padding: 34px 22px 10px; scroll-margin-top: 150px; }
+.rules__h { font-family: 'Cormorant', serif; font-size: 27px; font-weight: 400; margin-bottom: 6px; }
+.rules__lead { font-size: 12px; color: var(--dim); margin-bottom: 18px; }
+.acc { border-top: 1px solid var(--line); padding: 14px 0; }
+.acc summary {
+  list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between;
+  font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--gold);
+}
+.acc summary::-webkit-details-marker { display: none; }
+.acc summary::after { content: '+'; font-size: 16px; color: var(--dim); letter-spacing: 0; }
+.acc[open] summary::after { content: '−'; }
+.acc ol { counter-reset: r; margin-top: 14px; display: grid; gap: 12px; }
+.acc li {
+  counter-increment: r; position: relative; padding-left: 26px;
+  font-size: 12.5px; line-height: 1.55; color: rgba(242, 233, 220, .72);
+}
+.acc li::before {
+  content: counter(r, decimal-leading-zero); position: absolute; left: 0; top: 2px;
+  font-size: 9.5px; color: var(--gold); opacity: .8;
+}
+
+/* ---------- Контакты ---------- */
+.contacts {
+  padding: 36px 22px 26px; text-align: center;
+  border-top: 1px solid var(--line); margin-top: 20px;
+}
+.contacts__logo { width: 64px; margin: 0 auto 12px; opacity: .9; }
+.contacts__name {
+  font-family: 'Cormorant', serif; font-size: 22px; letter-spacing: .04em; margin-bottom: 12px;
+}
+.contacts__name em { font-style: normal; font-family: 'Golos Text', sans-serif; font-size: 8px; letter-spacing: .3em; opacity: .5; text-transform: uppercase; }
+.contacts p { font-size: 13px; line-height: 1.65; color: var(--dim); }
+.contacts__links { display: flex; gap: 16px; justify-content: center; margin: 16px 0 22px; }
+.contacts__links a {
+  font-size: 10px; letter-spacing: .14em; text-transform: uppercase;
+  border-bottom: 1px solid rgba(217, 166, 106, .4); padding-bottom: 3px; color: var(--gold);
+}
+.contacts__qr {
+  justify-content: center; text-align: left; padding: 14px 16px;
+  border: 1px dashed rgba(242, 233, 220, .2); border-radius: 14px; margin-bottom: 18px;
+}
+.contacts__qr canvas { width: 82px; height: 82px; border-radius: 4px; }
+.contacts__note { font-size: 9.5px; letter-spacing: .1em; text-transform: uppercase; color: rgba(242, 233, 220, .34); }
+
+/* ---------- Нижняя навигация ---------- */
+.bnav {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 70;
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  padding: 8px 8px calc(8px + env(safe-area-inset-bottom));
+  background: rgba(18, 16, 13, .94);
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid var(--line);
+}
+.bnav a {
+  display: flex; flex-direction: column; align-items: center; gap: 5px;
+  padding: 6px 0; font-size: 9px; letter-spacing: .1em; text-transform: uppercase;
+  color: rgba(242, 233, 220, .42); transition: color .2s;
+}
+.bnav svg { width: 20px; height: 20px; }
+.bnav a.is-active { color: var(--gold); }
+
+/* ---------- Шторка (тёмная) ---------- */
+.v-b .sheet__panel { background: #1B1613; color: var(--ink); border: 1px solid var(--line); }
+.v-b .sheet h3 { font-family: 'Cormorant', serif; font-weight: 500; font-size: 30px; }
+.v-b .sheet__grip { background: rgba(242, 233, 220, .22); }
+.v-b .sheet__close { background: rgba(242, 233, 220, .08); color: var(--ink); }
+.v-b .sheet__meta { color: var(--gold); }
+.v-b .sheet__price { background: rgba(217, 166, 106, .1); border: 1px solid rgba(217, 166, 106, .25); }
+.v-b .sheet__price b { color: var(--gold); }
+.v-b .sheet__btn { border: 1px solid rgba(217, 166, 106, .5); color: var(--gold); }
+.v-b .sheet__btn[href] { border-color: var(--line); color: var(--ink); }
+
+@media (min-width: 560px) {
+  .cards { grid-template-columns: repeat(3, 1fr); }
+  .tea ul { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* телефоны в контактах */
+.contacts__phones { display: flex; flex-direction: column; gap: 2px; margin-top: 2px; }
+.contacts__phones a { color: var(--gold); }
