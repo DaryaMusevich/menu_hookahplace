@@ -41,6 +41,14 @@ window.MENU = {
     langLabel: "Язык меню"
   },
 
+  tips: {
+    label: "Сервис",
+    title: "Чаевые",
+    text: "Спасибо, что цените труд нашей команды. Чаевые уходят напрямую чайным и кальянным мастерам.",
+    cta: "Оставить чаевые",
+    url: "https://netmonet.co/tip/group/680420?o=4"
+  },
+
   categories: [
     {
       id: "authors",

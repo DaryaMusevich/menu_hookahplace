@@ -300,3 +300,38 @@
   .lem { grid-template-columns: repeat(3, 1fr); }
   .cover__title { font-size: 108px; }
 }
+
+/* ---------- Чаевые ---------- */
+.tips { padding: 42px 0 6px; scroll-margin-top: 120px; }
+.tips__card {
+  background: var(--wine); color: var(--cream);
+  padding: 22px 20px 20px;
+}
+.tips__label {
+  font-size: 9.5px; letter-spacing: .26em; text-transform: uppercase;
+  opacity: .72; margin-bottom: 8px;
+}
+.tips__title {
+  font-family: 'Jost', sans-serif; font-size: 30px; font-weight: 500;
+  letter-spacing: .05em; line-height: 1; margin-bottom: 12px;
+}
+.tips__text {
+  font-size: 13.5px; line-height: 1.5; opacity: .88;
+  max-width: 44ch; margin-bottom: 18px;
+}
+.tips__btn {
+  display: flex; align-items: center; justify-content: center; gap: 9px;
+  width: 100%; white-space: nowrap;
+  font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase;
+  padding: 13px 16px; border: 1px solid rgba(246, 241, 230, .55);
+  border-radius: 99px; transition: background .2s;
+  -webkit-tap-highlight-color: transparent;
+}
+.tips__btn:active { background: rgba(246, 241, 230, .14); }
+.tips__btn span { font-size: 12px; }
+
+@media (min-width: 560px) {
+  .tips__btn { width: auto; align-self: flex-start; padding: 13px 30px; }
+  .tips__card { padding: 26px 26px 24px; }
+  .tips__title { font-size: 34px; }
+}

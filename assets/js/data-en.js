@@ -41,6 +41,14 @@ window.MENU_EN = {
     langLabel: "Menu language"
   },
 
+  tips: {
+    label: "Service",
+    title: "Tips",
+    text: "Thank you for appreciating our team's work. Tips go directly to our tea and hookah masters.",
+    cta: "Leave a tip",
+    url: "https://netmonet.co/tip/group/680420?o=4"
+  },
+
   categories: [
     {
       id: "authors",

@@ -49,6 +49,17 @@
 
   <div id="menu"></div>
 
+  <section class="tips" id="tips">
+    <div class="wrap">
+      <div class="tips__card">
+        <p class="tips__label" id="tips-label">Сервис</p>
+        <h2 class="tips__title" id="tips-title">Чаевые</h2>
+        <p class="tips__text" id="tips-text">Спасибо, что цените труд нашей команды.</p>
+        <a class="tips__btn" id="tips-btn" href="#" target="_blank" rel="noopener">Оставить чаевые <span aria-hidden="true">↗</span></a>
+      </div>
+    </div>
+  </section>
+
   <section class="sec rules" id="rules">
     <div class="wrap">
       <div class="sec-head">
@@ -81,6 +92,7 @@
         <p class="foot__links">
           <a id="f-inst" target="_blank" rel="noopener">Instagram</a>
           <a id="f-map" target="_blank" rel="noopener">На карте</a>
+          <a id="f-tips" target="_blank" rel="noopener">Чаевые</a>
         </p>
       </div>
     </div>
@@ -262,6 +274,19 @@
     $('f-inst').textContent = U.instagram;
     $('f-map').href = V.mapUrl;
     $('f-map').textContent = U.map;
+
+    /* чаевые */
+    const T = M.tips;
+    if (T) {
+      $('tips-label').textContent = T.label;
+      $('tips-title').textContent = T.title;
+      $('tips-text').textContent = T.text;
+      const btn = $('tips-btn');
+      btn.href = T.url;
+      btn.innerHTML = `${esc(T.cta)} <span aria-hidden="true">↗</span>`;
+      const ft = $('f-tips');
+      if (ft) { ft.href = T.url; ft.textContent = T.title; }
+    }
 
     UI.scrollSpy([...document.querySelectorAll('section.sec[id]')], links);
     UI.reveal();
